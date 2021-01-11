@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
       std::cout << " rankdir=LR";
     }
     if (dark_mode) {
-      std::cout << " bgcolor=\"#121212\"";
+      std::cout << " bgcolor=\"#18191a\"";
     }
     std::cout << "]" << std::endl;
 
