@@ -2,64 +2,56 @@
 #include <set>
 #include <vector>
 #include "parser.hpp"
+#include "commandParser.h"
 
 extern int yylex();
 extern Node *root; 
 
 int main(int argc, char** argv) {
-  // set default colorscheme and direction
-  bool vertical = true;
-  bool dark_mode = false;
+  CommandParser command(argc, argv);
+
+  // parse command-line options
+  std::string bg_color = command.getCmdOption("-bg");
+  std::string node_color = command.getCmdOption("-color");
+  std::string edge_color = command.getCmdOption("-edges");
+  std::string orientation = command.getCmdOption("-orientation");
+  if (orientation.empty()) {
+    // set default orientation to 'vertical'
+    orientation = "vertical";
+  }
 
   // fetch symbols from parser with yylex
   if (!yylex()) {
 
-    // check for --color and --dir commandline options
-    if (argc > 2) {
-      if (argv[1] == std::string("--color") && argv[2] == std::string("dark")) {
-        dark_mode = true;
-      }
-      else if (argv[1] == std::string("--dir") && argv[2] == std::string("horizontal")) {
-        vertical = false;
-      }
-    }
-    if (argc > 4) {
-      if (argv[3] == std::string("--color") && argv[4] == std::string("dark")) {
-        dark_mode = true;
-      }
-      else if (argv[3] == std::string("--dir") && argv[4] == std::string("horizontal")) {
-        vertical = false;
-      }
-    }
-
-    // print beginning of graphviz spec
+    // beginning of graphviz spec
     std::cout << "digraph G {" << std::endl;
 
-    // define graph styling
+    // graph styling
     std::cout << "  graph [center=1";
-    if (!vertical) {
+    if (orientation != "vertical") {
       std::cout << " rankdir=LR";
     }
-    if (dark_mode) {
-      std::cout << " bgcolor=\"#18191a\"";
+    if (!bg_color.empty()) {
+      std::cout << " bgcolor=\"" << bg_color << "\"";
     }
     std::cout << "]" << std::endl;
 
-    // define node styling
+    // node styling
     std::cout << "  node [fontname=\"Courier\"";
-    if (dark_mode) {
-      std::cout << " color=\"#FFFFFF\" style=\"filled\"";
+    if (!node_color.empty()) {
+      std::cout << " color=\"" << node_color << "\" style=\"filled\"";
     }
     std::cout << "]" << std::endl;
 
-    // define edge styling
-    if (dark_mode) {
-      std::cout << "  edge [color=\"#FFFFFF\"]";
+    // edge styling
+    if (!edge_color.empty()) {
+      std::cout << "  edge [color=\"" << edge_color << "\"]";
     }
 
     // print nodes recursively
     print_node(root, "n0", 0);
-    // print end of graphviz spec
+    
+    // end of graphviz spec
     std::cout << "}" << std::endl;
   }
 }
