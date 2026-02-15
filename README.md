@@ -6,8 +6,6 @@ The program first utilizes a flex scanner to ensure the input consists of entire
 
 Please note, this program is not compatible will all python syntax, merely a subset that we will refer to as "Simple Python Syntax". Note that this limitation is by design. This program is intended to be used in a greater python compiler, and a different component in the compiler would be responsible for reducing more advanced python syntax into simple syntax. For more, see the section below on Syntax.
 
-Check it out in action at [taylorgriffin.io](http://taylorgriffin.io/projects/python-ast)!
-
 ## Requirements
 
 * [g++](https://gcc.gnu.org/)
